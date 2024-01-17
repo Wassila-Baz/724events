@@ -7,62 +7,84 @@ import ModalEvent from "../ModalEvent";
 
 import "./style.css";
 
-const PER_PAGE = 9;
+// Nombre d'événements à afficher par page
+const PAR_PAGE = 9;
 
-const EventList = () => {
+const EventListe = () => {
+  // Récupérer les données et l'état d'erreur en utilisant le hook personnalisé
   const { data, error } = useData();
-  const [type, setType] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
-  const filteredEvents = (
-    (!type
-      ? data?.events
-      : data?.events) || []
-  ).filter((event, index) => {
-    if (
-      (currentPage - 1) * PER_PAGE <= index &&
-      PER_PAGE * currentPage > index
-    ) {
-      return true;
-    }
-    return false;
-  });
-  const changeType = (evtType) => {
-    setCurrentPage(1);
-    setType(evtType);
+  const [type, setType] = useState(); // État pour gérer le type d'événement sélectionné et la page actuelle
+  const [pageActuelle, setPageActuelle] = useState(1);
+
+  // Fonction pour changer le type d'événement sélectionné
+  const changerType = (typeEvt) => {
+    setPageActuelle(1);
+    setType(typeEvt);
   };
-  const pageNumber = Math.floor((filteredEvents?.length || 0) / PER_PAGE) + 1;
-  const typeList = new Set(data?.events.map((event) => event.type));
+
+  // Filtrer les événements en fonction du type sélectionné et de la page actuelle
+  const filteredEvents = (
+    type
+      ? data?.events.filter(event => event.type === type)
+      : data?.events
+  ) || [];
+
+  // Applique la pagination sur les événements filtrés
+  const paginatedEvents = filteredEvents.slice(
+    (pageActuelle - 1) * PAR_PAGE,
+    pageActuelle * PAR_PAGE
+  );
+
+  // Calculer le nombre total de pages en fonction des événements filtrés
+  const nombreDePages = Math.floor((filteredEvents?.length || 0) / PAR_PAGE) + 1;
+
+  // Extraire les types d'événements uniques à l'aide d'un ensemble (Set)
+  const typeList = new Set((data?.events || []).map((evenement) => evenement.type));
+
   return (
     <>
-      {error && <div>An error occured</div>}
+      {/* Afficher un message d'erreur s'il y a une erreur */}
+      {error && <div>Une erreur est survenue</div>}
+
+      {/* Afficher un message de chargement pendant le chargement des données */}
       {data === null ? (
-        "loading"
+        "Chargement"
       ) : (
         <>
+          {/* Afficher le titre de la sélection de catégorie */}
           <h3 className="SelectTitle">Catégories</h3>
+
+          {/* Liste déroulante pour sélectionner les types d'événements */}
           <Select
             selection={Array.from(typeList)}
-            onChange={(value) => (value ? changeType(value) : changeType(null))}
+            onChange={(valeur) => (valeur ? changerType(valeur) : changerType(null))}
           />
+
+          {/* Afficher la liste des événements */}
           <div id="events" className="ListContainer">
-            {filteredEvents.map((event) => (
-              <Modal key={event.id} Content={<ModalEvent event={event} />}>
+            {paginatedEvents.map((evenement) => (
+              // Envelopper chaque carte d'événement avec un modal
+              <Modal key={evenement.id} Content={<ModalEvent evenement={evenement} />}>
+                {/* Rendre la carte d'événement à l'intérieur du modal */}
                 {({ setIsOpened }) => (
                   <EventCard
                     onClick={() => setIsOpened(true)}
-                    imageSrc={event.cover}
-                    title={event.title}
-                    date={new Date(event.date)}
-                    label={event.type}
+                    imageSrc={evenement.cover}
+                    title={evenement.title}
+                    date={new Date(evenement.date)}
+                    label={evenement.type}
                   />
                 )}
               </Modal>
             ))}
           </div>
+
+          {/* Afficher les liens de pagination */}
           <div className="Pagination">
-            {[...Array(pageNumber || 0)].map((_, n) => (
+            {[...Array(nombreDePages || 0)].map((_, n) => (
+              // Rendre les liens de pagination
               // eslint-disable-next-line react/no-array-index-key
-              <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
+              <a key={n} href="#events" onClick={() => setPageActuelle(n + 1)}>
                 {n + 1}
               </a>
             ))}
@@ -73,4 +95,4 @@ const EventList = () => {
   );
 };
 
-export default EventList;
+export default EventListe;
