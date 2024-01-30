@@ -39,7 +39,7 @@ const EventListe = () => {
   const nombreDePages = Math.floor((filteredEvents?.length || 0) / PAR_PAGE) + 1;
 
   // Extraire les types d'événements uniques à l'aide d'un ensemble (Set)
-  const typeList = new Set((data?.events || []).map((evenement) => evenement.type));
+  const typeList = new Set((data?.events || []).map((event) => event.type));
 
   return (
     <>
@@ -62,17 +62,17 @@ const EventListe = () => {
 
           {/* Afficher la liste des événements */}
           <div id="events" className="ListContainer">
-            {paginatedEvents.map((evenement) => (
+            {paginatedEvents.map((event) => (
               // Envelopper chaque carte d'événement avec un modal
-              <Modal key={evenement.id} Content={<ModalEvent evenement={evenement} />}>
+              <Modal key={event.id} Content={<ModalEvent evenement={event} />}>
                 {/* Rendre la carte d'événement à l'intérieur du modal */}
                 {({ setIsOpened }) => (
                   <EventCard
                     onClick={() => setIsOpened(true)}
-                    imageSrc={evenement.cover}
-                    title={evenement.title}
-                    date={new Date(evenement.date)}
-                    label={evenement.type}
+                    imageSrc={event.cover}
+                    title={event.title}
+                    date={new Date(event.date)}
+                    label={event.type}
                   />
                 )}
               </Modal>
