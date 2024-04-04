@@ -1,3 +1,4 @@
+// GERE NOMBRE D'EVENEMENT ET FILTRE
 import { useState } from "react";
 import EventCard from "../../components/EventCard";
 import Select from "../../components/Select";
@@ -10,19 +11,19 @@ import "./style.css";
 // Nombre d'événements à afficher par page
 const PAR_PAGE = 9;
 
-const EventListe = () => {
+const EventList = () => {
   // Récupérer les données et l'état d'erreur en utilisant le hook personnalisé
   const { data, error } = useData();
   const [type, setType] = useState(); // État pour gérer le type d'événement sélectionné et la page actuelle
-  const [pageActuelle, setPageActuelle] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Fonction pour changer le type d'événement sélectionné
   const changerType = (typeEvt) => {
-    setPageActuelle(1);
+    setCurrentPage(1);
     setType(typeEvt);
   };
 
-  // Filtrer les événements en fonction du type sélectionné et de la page actuelle
+  // Filtrer les événements en fonction du type sélectionné et de la page actuelle//
   const filteredEvents = (
     type
       ? data?.events.filter(event => event.type === type)
@@ -31,8 +32,8 @@ const EventListe = () => {
 
   // Applique la pagination sur les événements filtrés
   const paginatedEvents = filteredEvents.slice(
-    (pageActuelle - 1) * PAR_PAGE,
-    pageActuelle * PAR_PAGE
+    (currentPage - 1) * PAR_PAGE,
+    currentPage * PAR_PAGE
   );
 
   // Calculer le nombre total de pages en fonction des événements filtrés
@@ -48,7 +49,7 @@ const EventListe = () => {
 
       {/* Afficher un message de chargement pendant le chargement des données */}
       {data === null ? (
-        "Chargement"
+        "Loading"
       ) : (
         <>
           {/* Afficher le titre de la sélection de catégorie */}
@@ -84,7 +85,7 @@ const EventListe = () => {
             {[...Array(nombreDePages || 0)].map((_, n) => (
               // Rendre les liens de pagination
               // eslint-disable-next-line react/no-array-index-key
-              <a key={n} href="#events" onClick={() => setPageActuelle(n + 1)}>
+              <a key={n} href="#events" onClick={() => setCurrentPage(n + 1)}>
                 {n + 1}
               </a>
             ))}
@@ -95,4 +96,4 @@ const EventListe = () => {
   );
 };
 
-export default EventListe;
+export default EventList;

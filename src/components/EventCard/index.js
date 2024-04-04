@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+import PropTypes from "prop-types"; // une carte d'événement
 import { getMonth } from "../../helpers/Date";
 
 import "./style.scss";

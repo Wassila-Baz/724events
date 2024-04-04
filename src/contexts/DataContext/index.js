@@ -48,7 +48,7 @@ const last = sortedEvents?.[0];
       value={{
         data,
         error,
-        last,
+        last, // ajout de la valeur last pour afficher le dernier projet 
       }}
     >
       {children}
