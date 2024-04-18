@@ -65,7 +65,7 @@ const EventList = () => {
           <div id="events" className="ListContainer">
             {paginatedEvents.map((event) => (
               // Envelopper chaque carte d'événement avec un modal
-              <Modal key={event.id} Content={<ModalEvent evenement={event} />}>
+              <Modal key={event.id} Content={<ModalEvent event={event} />}>
                 {/* Rendre la carte d'événement à l'intérieur du modal */}
                 {({ setIsOpened }) => (
                   <EventCard
