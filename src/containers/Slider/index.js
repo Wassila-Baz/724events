@@ -16,7 +16,7 @@ const Slider = () => {
 
   const nextCard = () => {
     setTimeout(
-      () => setIndex(index < imgSlide -1 ? index + 1 : 0),
+      () => setIndex(index < imgSlide -1 ? index + 1 : 0), // correction 
       5000
     );
   };
@@ -49,7 +49,7 @@ const Slider = () => {
                 key={focus.title}
                 type="radio"
                 name="radio-button"
-                checked={index === radioIdx}
+                checked={index === radioIdx} 
                 readOnly
               />
             ))}

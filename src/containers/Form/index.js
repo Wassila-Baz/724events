@@ -1,3 +1,4 @@
+// Form.js
 import { useCallback, useState } from "react";
 import PropTypes from "prop-types";
 import Field, { FIELD_TYPES } from "../../components/Field";
@@ -37,7 +38,7 @@ const Form = ({ onSuccess, onError }) => {
             type="large"
             titleEmpty
           />
-          <Field placeholder="" label="Email" />
+          <Field placeholder="Entrez votre email" label="Email" />
           <Button type={BUTTON_TYPES.SUBMIT} disabled={sending}>
             {sending ? "En cours" : "Envoyer"}
           </Button>
